@@ -1,0 +1,47 @@
+module memory_unit (
+    input clk,
+    input we,                  // Write enable for RAM
+    input sel,                 // 0 = RAM, 1 = ROM
+    input [3:0] addr,
+    input [7:0] din,
+    output reg [7:0] dout
+);
+
+// RAM declaration
+reg [7:0] ram [15:0];
+
+// ROM declaration (predefined values)
+reg [7:0] rom [15:0];
+
+initial begin
+    rom[0]  = 8'h11;
+    rom[1]  = 8'h22;
+    rom[2]  = 8'h33;
+    rom[3]  = 8'h44;
+    rom[4]  = 8'h55;
+    rom[5]  = 8'h66;
+    rom[6]  = 8'h77;
+    rom[7]  = 8'h88;
+    rom[8]  = 8'h99;
+    rom[9]  = 8'hAA;
+    rom[10] = 8'hBB;
+    rom[11] = 8'hCC;
+    rom[12] = 8'hDD;
+    rom[13] = 8'hEE;
+    rom[14] = 8'hFF;
+    rom[15] = 8'h00;
+end
+
+always @(posedge clk) begin
+    if (sel == 0) begin
+        // RAM operation
+        if (we)
+            ram[addr] <= din;     // Write
+        dout <= ram[addr];        // Read
+    end else begin
+        // ROM operation
+        dout <= rom[addr];
+    end
+end
+
+endmodule
